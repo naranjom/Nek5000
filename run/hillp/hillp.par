@@ -5,7 +5,8 @@
 stopAt = endTime
 endTime = 200
 
-varialeDT = yes
+targetCFL = 1
+variableDT = yes
 timeStepper = bdf2
 
 writeControl = runTime
