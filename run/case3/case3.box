@@ -1,0 +1,19 @@
+-3                     spatial dims (will create box.re2)
+2                      number of fields
+#
+#                      comments: 3-D Natural Circulation
+#                                flux = 5e3
+#                                mv box.re2 case3.re2
+#
+#========================================================
+#
+Box                              Temperature
+-20 -20 -20                      Nelx Nely
+#0.0 0.5 1.                       x0 x1 ratio
+#0.0 0.5 1.                       y0 y1 ratio
+#0.0 0.5 1.                       z0 z1 ratio
+0.0 1.0 1.                       x0 x1 ratio
+0.0 1.0 1.                       y0 y1 ratio
+0.0 1.0 1.                       z0 z1 ratio
+W  ,W  ,W  ,W  ,W  ,W            Veloc BC's: cbx0, cbx1, cby0, cby1, cbz0, cbz1
+I  ,I  ,f  ,f  ,I  ,I  

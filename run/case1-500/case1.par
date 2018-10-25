@@ -1,0 +1,30 @@
+#
+#    nek parameter file
+#
+[GENERAL]
+stopAt = endTime
+endTime = 100
+
+targetCFL = 0.4
+variableDT = yes
+timeStepper = bdf2
+
+writeControl = runTime
+writeInterval = 1
+
+[PROBLEMTYPE]
+equation = incompNS
+
+[PRESSURE]
+residualTol = 1e-5
+residualProj = yes
+
+[VELOCITY]
+residualTol = 1e-8
+density =  999.7026                !if .eq. 1 then nondimensional
+viscosity = 1.307e-3       !Dynamic; if (-)x then x = Re
+
+[TEMPERATURE]
+residualTol = 1e-8
+rhoCp       = 4.218e6
+conductivity = 0.58    ! if (-)x then x = Pe; Pe = RePr
