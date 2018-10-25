@@ -1,4 +1,4 @@
-# Ignore everything in this directory?
-*
+# Ignore everything in this directory? No, just the object file
+obj
 # Except this file
 !.gitignore
