@@ -1,0 +1,24 @@
+template.rea
+3                     spatial dims (will create box.re2)
+2                      number of fields
+#
+#                      comments: moly project
+#                                qvol = 5e3/Vol
+#                                genbox -> moly.box
+#                                reatore2 -> box -> moly
+#
+#========================================================
+#
+Y                                          cYlinder
+40 -40 -60                                 Nelr, Nel_theta, Nelz
+0.1 0.1                                    x0, y0 - center of cylinder
+ccccccccccccccoooooooooooobbbbbbbbbbbbbbb  descriptors: c-cyl, o-oct, b-box (1 character+space)
+0.04 0.04107143 0.04214286 0.04321429 0.04428571 0.04535714 0.04642857 0.0475
+ 0.04857143 0.04964286 0.05071429 0.05178571 0.05285714 0.05392857 0.055 0.0576
+ 0.06008 0.06256 0.06504 0.06752 0.07 0.07248 0.07496 0.07744 0.07992 0.0824
+ 0.085 0.08607143 0.08714286 0.08821429 0.08928571 0.09035714 0.09142857 0.0925
+ 0.09357143 0.09464286 0.09571429 0.09678571 0.09785714 0.09892857 0.1          r0 r1 ... r_nelr
+0 1 1                       theta0/2pi theta1/2pi ratio
+0 0.2 1                     z0 z1 ratio
+W  ,W  ,P  ,P  ,W  ,W       Veloc BC's: r0, r1, theta0, theta1, z0, z1
+t  ,t  ,P  ,P  ,I  ,I       Temp BC's:  r0, r1, theta0, theta1, z0, z1
