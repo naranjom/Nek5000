@@ -1,0 +1,9 @@
+rm moly0*
+
+rm box.rea
+
+make clean
+
+makenek
+
+genmap

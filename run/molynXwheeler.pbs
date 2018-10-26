@@ -1,0 +1,42 @@
+#!/bin/bash
+##Mario R. Naranjo
+##07/11/2018
+
+#######################################################################
+#######################################################################
+##                    PBS for running incompact3d                    ## 
+##    The Center for Advanced Research Computing(CARC)'s Wheeler     ##
+##              Machine at The University of New Mexico              ##
+#######################################################################
+#######################################################################
+############execute by entering qsub xxxx.pbs##########################
+##     Specifies the shell to be bash
+#PBS -S /bin/bash
+##     Creates job name
+#PBS -N molyn8
+##     Requests x nodes @ 8 ppn(wheeler has 8 cores per node.)
+#PBS -l nodes=32:ppn=8
+##     Requests HH:MM:SS of time to run the program
+#PBS -l walltime=48:00:00
+##     Mailing options -aborted,begins, ends
+##PBS -m n
+PBS_JOBNUM=$(echo $PBS_JOBID | cut -d. -f1)
+#######################################################################
+##     Assign unique chronological case number to run data
+OUTPUT=/users/naranjom/Nek5000/run/molyn8/molyn8$PBS_JOBNUM.log
+###############################################
+##--------------Wheeler modules--------------##
+##make sure we are working with a clean slate##
+module purge                                 ##
+###############################################
+##---Load gcc compiler and openmpi library---##
+###############################################
+module load fftw-3.3.6-pl2-gcc-4.8.5-openmpi-zup6z74
+###############################################
+#############  Move to Nek5000 dir with executable  ############
+cd /users/naranjom/Nek5000/run/molyn8
+##     Export path
+export PATH=/users/naranjom/Nek5000/bin:$PATH
+## List all current and archived cases ########
+nekmpi moly $PBS_NP | tee -a $OUTPUT
+###############################################
