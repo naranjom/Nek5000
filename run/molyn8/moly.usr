@@ -26,10 +26,10 @@ c      implicit none
 
       REAL :: myrho, mydynamicViscosity, myrhoCp, myconductivity
 
-      myrho = 1184.43892              ! kg/m3
-      mydynamicViscosity = 1.44169113 ! Pa*s or  e3 cP
-      myrhoCp = 3.56437296e6          ! J/m3*C
-      myconductivity = 0.574462677    ! W/m*C
+      myrho = 1184.43892                 ! kg/m3
+      mydynamicViscosity = 1.44169113e-3 ! Pa*s or  e3 cP
+      myrhoCp = 3.56437296e6             ! J/m3*C
+      myconductivity = 0.574462677       ! W/m*C
 
       if (ifield .eq. 1) then
           utrans = myrho
@@ -59,14 +59,13 @@ c      implicit none
 
       mygravity = -9.80665              ! m/s2
       thermalExpansionVol = 461.0e-6    ! 1/T (C or K)
-      tempIC = 25                     ! C
+      tempIC = 25                       ! C
 
       bouyancyForce = mygravity*(1-thermalExpansionVol*(temp-tempIC))
 
       ffx = 0.0
       ffy = bouyancyForce
       ffz = 0.0
-
 
       return
       end
@@ -81,7 +80,7 @@ c      implicit none
       include 'TOTAL'
       include 'NEKUSE'
 
-      qvol   = 5.0e4
+      qvol = 5.0e4                      ! .5 kW/m3)
 
       return
       end
@@ -98,27 +97,29 @@ c      implicit none
       include 'TOTAL'
       include 'NEKUSE'
 
+      REAL :: rad
+
       ux   = 0.0
       uy   = 0.0
       uz   = 0.0
+
       rad  = sqrt( ( x - 0.10 )**2 + ( y - 0.10 )**2 )
 
       if (x .eq. 0.0) then
           temp = 25.0
-      else if (x .eq. 0.20) then
+      else if (x .ge. 0.20) then
           temp = 25.0
       end if
 
       if (y .eq. 0.0) then
           temp = 25.0
-      else if (y .eq. 0.20) then
+      else if (y .ge. 0.20) then
           temp = 25.0
       end if
 
       if (rad .le. 0.0405) then
           temp = 25.0
       end if
-
 
       return
       end
@@ -137,7 +138,6 @@ c      implicit none
       uy   = 0.0
       uz   = 0.0
       temp = 25.0             ! Celsius
-
 
       return
       end
@@ -178,16 +178,11 @@ c      implicit none
       include 'SIZE'
       include 'TOTAL'
 
-      REAL :: areaPipe, radPipe, vdotPipe
+      REAL :: pi
       
       pi = 4.d0*atan(1.d0)
-      radPipe = 0.0050
-      areaPipe = pi * radPipe**2
-      vdotPipe = ux * areaPipe
 
       param(30) = 1              ! >0 --> properties set in uservp()
-c      param(54) = 1              ! x-direction
-c      param(55) = vdotPipe      ! volumetric flow rate
 
       return
       end
