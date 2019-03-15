@@ -1,0 +1,14 @@
+-2                     spatial dims (will create box.re2)
+1                      number of fields
+#
+#                      comments: 2-D Lid Driven Flow
+#                                flux = 5e3
+#                                mv box.re2 case3.re2
+#
+#========================================================
+#
+Box                              Temperature
+-20 -20 -20                      Nelx Nely
+0.0 0.20 1.                       x0 x1 ratio
+0.0 0.20 1.                       y0 y1 ratio
+W  ,W  ,W  ,W            Veloc BC's: cbx0, cbx1, cby0, cby1, cbz0, cbz1

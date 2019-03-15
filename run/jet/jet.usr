@@ -1,0 +1,248 @@
+c-----------------------------------------------------------------------
+c  nek5000 user-file template
+c
+c  user specified routines:
+c     - uservp  : variable properties
+c     - userf   : local acceleration term for fluid
+c     - userq   : local source term for scalars
+c     - userbc  : boundary conditions
+c     - useric  : initial conditions
+c     - userchk : general purpose routine for checking errors etc.
+c     - userqtl : thermal divergence for lowMach number flows 
+c     - usrdat  : modify element vertices 
+c     - usrdat2 : modify mesh coordinates
+c     - usrdat3 : general purpose routine for initialization
+c     
+c-----------------------------------------------------------------------
+      subroutine uservp(ix,iy,iz,eg) ! set variable properties
+
+c      implicit none
+
+      integer ix,iy,iz,eg
+     
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      REAL :: myrho, mydynamicViscosity, myrhoCp, myconductivity
+
+      myrho = 1184.43892                 ! kg/m3
+      mydynamicViscosity = 1.44169113e-3 ! Pa*s or  e3 cP
+      myrhoCp = 3.56437296e6             ! J/m3*C
+      myconductivity = 0.574462677       ! W/m*C
+
+      if (ifield .eq. 1) then
+          utrans = myrho
+          udiff  = mydynamicViscosity
+      else if (ifield .eq. 2) then
+          utrans = myrhoCp
+          udiff  = myconductivity
+      endif
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userf(ix,iy,iz,eg) ! set acceleration term
+c
+c     Note: this is an acceleration term, NOT a force!
+c     Thus, ffx will subsequently be multiplied by rho(x,t).
+c
+c      implicit none
+
+      integer ix,iy,iz,eg
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      REAL :: mygravity, thermalExpansionVol, tempIC, bouyancyForce
+
+      mygravity = -9.80665              ! m/s2
+      thermalExpansionVol = 461.0e-6    ! 1/T (C or K)
+      tempIC = 25                       ! C
+
+      bouyancyForce = mygravity*(1-thermalExpansionVol*(temp-tempIC))
+
+      ffx = 0.0
+      ffy = bouyancyForce
+      ffz = 0.0
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userq(ix,iy,iz,eg) ! set source term
+
+c      implicit none
+
+      integer ix,iy,iz,eg
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      qvol = 5.0e4                      ! .5 kW/m3)
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userbc(ix,iy,iz,iside,eg) ! set up boundary conditions
+c
+c     NOTE ::: This subroutine MAY NOT be called by every process
+c
+c      implicit none
+
+      integer ix,iy,iz,iside,eg
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      REAL :: rad
+
+      ux   = 0.0
+      uy   = 0.0
+      uz   = 0.0
+
+      rad  = sqrt( ( x - 0.10 )**2 + ( y - 0.10 )**2 )
+
+      if (x .eq. 0.0) then
+          temp = 25.0
+      else if (x .ge. 0.20) then
+          temp = 25.0
+      end if
+
+      if (y .eq. 0.0) then
+          temp = 25.0
+      else if (y .ge. 0.20) then
+          temp = 25.0
+      end if
+
+      if (rad .le. 0.0405) then
+          temp = 25.0
+      end if
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine useric(ix,iy,iz,eg) ! set up initial conditions
+
+c      implicit none
+
+      integer ix,iy,iz,eg
+
+      include 'SIZE'
+      include 'TOTAL'
+      include 'NEKUSE'
+
+      ux   = 0.0
+      uy   = 0.0
+      uz   = 0.0
+      temp = 25.0             ! Celsius
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userchk()
+
+c      implicit none
+
+      include 'SIZE'
+      include 'TOTAL'
+
+      call e2t_out
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine userqtl ! Set thermal divergence
+
+      call userqtl_scig 
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat()   ! This routine to modify element vertices
+
+c      implicit none
+
+      include 'SIZE'
+      include 'TOTAL'
+   
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat2()  ! This routine to modify mesh coordinates
+
+c      implicit none
+
+      include 'SIZE'
+      include 'TOTAL'
+
+      pi = 4.d0*atan(1.d0)
+
+      param(30) = 1              ! >0 --> properties set in uservp()
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine usrdat3()
+
+c      implicit none
+
+      include 'SIZE'
+      include 'TOTAL'
+
+      return
+      end
+c-----------------------------------------------------------------------
+      subroutine e2t_out
+      include 'SIZE'
+      include 'TOTAL'
+c
+c     prints out uvwpt abs max and volume average/rms
+ 
+
+      nt  = nx1*ny1*nz1*nelt
+      nv  = nx1*ny1*nz1*nelv
+      n2  = nx2*ny2*nz2*nelv
+      vxm = glamax(vx,nv)			! absolute value max
+      vym = glamax(vy,nv)
+      prm = glamax(pr,n2)
+      tem = glamax(t ,nt)
+      vxa = glsc2(vx,   bm1,nt) / volvm1	! volume-average
+      vya = glsc2(vy,   bm1,nt) / volvm1
+      pra = glsc2(pr,   bm2,n2) / volvm2
+      tea = glsc2(t ,   bm1,nt) / volvm1
+      vx2 = glsc3(vx,vx,bm1,nt) / volvm1
+      vy2 = glsc3(vy,vy,bm1,nt) / volvm1
+      pr2 = glsc3(pr,pr,bm2,n2) / volvm2
+      te2 = glsc3(t ,t ,bm1,nt) / volvm1
+      vx2 = vx2 - vxa*vxa
+      vy2 = vy2 - vya*vya
+      pr2 = pr2 - pra*pra
+      te2 = te2 - tea*tea
+      if (vx2.gt.0.) vx2 = sqrt(vx2)		! volume-rms
+      if (vy2.gt.0.) vy2 = sqrt(vy2)
+      if (pr2.gt.0.) pr2 = sqrt(pr2)
+      if (te2.gt.0.) te2 = sqrt(te2)
+
+      if (if3d) then		! 3D
+         vzm = glamax(vz,nv)
+         vza = glsc2(vz,   bm1,nt) / volvm1
+         vz2 = glsc3(vz,vz,bm1,nt) / volvm1
+         vz2 = vz2 - vza*vza
+         if (vz2.gt.0) vz2 = sqrt(vz2)
+
+         if (nid.eq.0) write(6,1) istep,time,vxa,vya,vza,pra,tea ! 1-2  3-7
+     $                  ,vx2,vy2,vz2,pr2,te2,vxm,vym,vzm,prm,tem ! 8-12 13-17
+      else
+         if (nid.eq.0) write(6,2) istep,time,vxa,vya,pra,tea     ! 1-2  3-6
+     $                      ,vx2,vy2,pr2,te2,vxm,vym,prm,tem     ! 7-10 11-14
+      endif
+!         tstep time avgut  rmsut   amaxut
+    1 format(i7, 1p6e16.7, 5e14.5, 5g14.5, ' e2t')
+    2 format(i7, 1p5e16.7, 4e14.5, 4g14.5, ' e2t')
+
+      return
+      end
+c-----------------------------------------------------------------------

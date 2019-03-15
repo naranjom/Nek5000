@@ -9,15 +9,15 @@ c
       integer lfdm, ldimt_proj
 
       ! BASIC
-      parameter (ldim=3)               ! domain dimension (2 or 3)
-      parameter (lx1=8)                ! p-order (avoid uneven and values <6)
-      parameter (lxd=3*(lx1)/2)        ! p-order for over-integration (dealiasing) 
+      parameter (ldim=2)               ! domain dimension (2 or 3)
+      parameter (lx1=6)                ! p-order (avoid uneven and values <6)
+      parameter (lxd=3*(lx1)/2)              ! p-order for over-integration (dealiasing) 
 
       parameter (lx2=lx1)              ! GLL points for pressure (lx1 or lx1-2)
                                      
-      parameter (lelg=(40**2)*60)      ! max total number of elements
-      parameter (lpmin=198)              ! min MPI ranks
-      parameter (lpmax=200)	       ! max MPI ranks
+      parameter (lelg=20**2)           ! max total number of elements
+      parameter (lpmin=8)              ! min MPI ranks
+      parameter (lpmax=256)	       ! max MPI ranks
       parameter (ldimt=2)              ! max auxiliary fields (temperature + scalars)
 
 ! OPTIONAL
@@ -25,12 +25,12 @@ c
       parameter (lhis=100)             ! max history/monitoring points
       parameter (maxobj=4)             ! max number of objects
       parameter (lpert=1)              ! max number of perturbations
-      parameter (toteq=10)              ! max number of conserved scalars in CMT
+      parameter (toteq=1)              ! max number of conserved scalars in CMT
       parameter (nsessmax=2)           ! max sessions to NEKNEK
       parameter (lxo=lx1)              ! max grid size on output (lxo>=lx1)
-      parameter (lelx=1,lely=1,lelz=1) ! global tensor mesh dimensions
+      parameter (lelx=10,lely=10,lelz=10) ! global tensor mesh dimensions
       parameter (mxprev=30,lgmres=20)  ! max dim of projection & Krylov space
-      parameter (lorder=3)             ! max order in time
+      parameter (lorder=2)             ! max order in time
 
       parameter (lelt=lelg/lpmin + 2)  ! max number of local elements per MPI rank
       parameter (lx1m=lx1)               ! polynomial order mesh solver

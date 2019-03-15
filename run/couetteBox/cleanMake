@@ -1,0 +1,9 @@
+rm $HOME/couetteBox.?2*
+rm couette0*
+rm couette*log
+
+
+make clean
+makenek
+echo "genmap:"
+genmap
