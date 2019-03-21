@@ -1,0 +1,46 @@
+#
+#    nek parameter file
+#
+[GENERAL]
+#startFrom = couette0.f00500
+stopAt = endTime
+endTime = 8.0e4
+
+userparam01 = 1
+
+dt = 1.0e-3
+timeStepper = bdf2
+extrapolation = OIFS
+variableDT = yes
+#variableDT = no
+targetCFL = 2.0
+dealiasing = yes
+
+writeControl = runTime
+writeInterval = 10
+
+#filtering = hpfrt
+#filterWeight = 10
+#filterCutoffRatio = 0.9
+
+[PROBLEMTYPE]
+variableProperties = yes
+equation = incompNS
+
+[PRESSURE]
+#preconditioner = semg_amg   !run the amg_hypre tool once
+residualTol = 1e-5
+residualProj = yes
+#residualProj = no
+
+[VELOCITY]
+residualTol = 1e-8
+residualProj = yes
+#residualProj = no
+density = 999.7026         !if .eq. 1 then nondimensional
+viscosity = 1.307e-3    !Dynamic; if (-)x then x = Re
+
+#[TEMPERATURE]
+#residualTol = 1e-8
+#rhoCp       = 4.1908e6
+#conductivity = 0.58    ! if (-)x then x = Pe; Pe = RePr

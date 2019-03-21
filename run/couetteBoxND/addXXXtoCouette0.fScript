@@ -1,0 +1,7 @@
+#!/bin/bash
+
+N=501
+for X in moly0.f*; do
+  mv $X couette0.f00$N
+  N=$(($N+1))
+done

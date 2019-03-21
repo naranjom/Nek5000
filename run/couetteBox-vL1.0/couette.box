@@ -1,0 +1,13 @@
+-2                     spatial dims (will create box.re2)
+1                      number of fields
+#
+#                      comments: 2-D Lid Driven Flow
+#                                mv box.re2 couette.re2
+#
+#========================================================
+#
+Box
+-300 -300                      Nelx Nely
+0.0 1.0 1.                       x0 x1 ratio
+0.0 1.0 1.                       y0 y1 ratio
+W  ,W  ,W  ,v            Veloc BC's: cbx0, cbx1, cby0, cby1, cbz0, cbz1

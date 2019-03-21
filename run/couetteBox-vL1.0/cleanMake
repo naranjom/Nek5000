@@ -1,0 +1,10 @@
+rm $HOME/*Q*.?2*
+rm couette0*
+rm couette*log*
+rm *~*
+
+make clean
+makenek
+echo "genmap:"
+genmap
+echo "couette"
