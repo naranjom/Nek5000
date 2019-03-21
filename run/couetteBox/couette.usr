@@ -84,7 +84,7 @@ c      implicit none
       include 'NEKUSE'
 
 c      temp = 10.0
-      if (y .ge. 0.198750) then
+      if (y .ge. 1.0) then
           ux = 0.03922166452302915
           uy = 0.0
           uz = 0.0

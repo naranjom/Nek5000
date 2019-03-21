@@ -4,7 +4,7 @@
 #11/18/2018:       Added pressure columns
 #                  Added n6 to logfile name--> change as necessary
 #-------------------------------------------------------------------------------
-grep -E 'e2t' couette.log.144 > runStatistics.grep
+grep -E 'e2t' couette256992.log > runStatistics.grep
 #-------------------------------------------------------------------------------
 awk 'BEGIN { format = "%-8s %-9s %-12s %-12s %-13s %-12s %-8s\n"
              printf format, "iStep",   "Time",    "u-VelAvg", "v-VelAvg",  "PresAvg",    "TempAvg",    "TempMax"
@@ -22,5 +22,5 @@ echo
 echo "L=1.0: Lid Driven Box Stats"
 head --lines=1 ../couetteBox/runStatisticsCB1.0.log
 tail --lines=20 ../couetteBox/runStatisticsCB1.0.log
-tail couette.log.144
+tail couette256992.log
 #-------------------------------------------------------------------------------
